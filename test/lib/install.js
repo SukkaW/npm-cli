@@ -92,15 +92,14 @@ test('should install globally using Arborist', (t) => {
 
 test('completion to folder', (t) => {
   const install = requireInject('../../lib/install.js', {
-    'util': {
-      'promisify': (fn) => fn
-    },
     'fs': {
-      'readdir': (path) => {
-        if (path === '/') {
-          return ['arborist']
-        } else {
-          return ['package.json']
+      'promises': {
+        'readdir': (path) => {
+          if (path === '/') {
+            return ['arborist']
+          } else {
+            return ['package.json']
+          }
         }
       }
     }
@@ -117,12 +116,11 @@ test('completion to folder', (t) => {
 
 test('completion to folder - invalid dir', (t) => {
   const install = requireInject('../../lib/install.js', {
-    'util': {
-      'promisify': (fn) => fn
-    },
     'fs': {
-      'readdir': () => {
-        throw new Error('EONT')
+      'promises': {
+        'readdir': () => {
+          throw new Error('EONT')
+        }
       }
     }
   })
@@ -141,8 +139,10 @@ test('completion to folder - no matches', (t) => {
       'promisify': (fn) => fn
     },
     'fs': {
-      'readdir': (path) => {
-        return ['foobar']
+      'promises': {
+        'readdir': (path) => {
+          return ['foobar']
+        }
       }
     }
   })
@@ -161,11 +161,13 @@ test('completion to folder - match is not a package', (t) => {
       'promisify': (fn) => fn
     },
     'fs': {
-      'readdir': (path) => {
-        if (path === '/') {
-          return ['arborist']
-        } else {
-          throw new Error('EONT')
+      'promises': {
+        'readdir': (path) => {
+          if (path === '/') {
+            return ['arborist']
+          } else {
+            throw new Error('EONT')
+          }
         }
       }
     }
